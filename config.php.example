@@ -3,4 +3,5 @@
 define('DB_NAME','news');
 define('DB_USER','user');
 define('DB_PASS','password');
+define('DEBUG_MODE',true);
 
