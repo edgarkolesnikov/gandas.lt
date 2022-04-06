@@ -2,11 +2,22 @@
 
 namespace Controller;
 
-class News
+use Core\ControllerAbstract;
+
+class News extends ControllerAbstract
 {
     public function show($slug)
     {
-        echo 'cia bus logika kuri uzkrovines straipsni';
-        echo ' kurio slug <b>'.$slug. '</b>';
+        $new = new \Model\News();
+        $new ->loadBySlug($slug);
+        echo $this->twig->render('news/single.html',['new'=>$new]);
     }
+
+    public function all(){
+        $news = new \Model\Collection\News();
+        $news->filter('active', 1);
+        $news->limit(3);
+        echo $this->twig->render('news/all.html', ['news'=> $news->get()]);
+    }
+
 }

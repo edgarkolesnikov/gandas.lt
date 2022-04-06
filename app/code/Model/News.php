@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Model;
 
-class News
+use Core\ModelAbstract;
+use Aura\SqlQuery\QueryFactory;
+
+class News extends ModelAbstract
 {
     private int $id;
 
@@ -30,14 +33,6 @@ class News
     public function getId(): int
     {
         return $this->id;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId(int $id): void
-    {
-        $this->id = $id;
     }
 
     /**
@@ -167,6 +162,65 @@ class News
     {
         $this->image = $image;
     }
+
+    public function loadBySlug($slug)
+    {
+        $sql = $this->select();
+        $sql->cols(['*'])->from('news')->where('slug = :slug');
+        $sql->bindValue('slug', $slug);
+
+        if ($rez = $this->db->get($sql)) {
+            $this->id = (int)$rez['id'];
+            $this->title = $rez['title'];
+            $this->content = $rez['content'];
+            $this->authorId = (int)$rez['author_id'];
+            $this->createdAt = $rez['created_at'];
+            $this->active = (int)$rez['active'];
+            $this->views = (int)$rez['views'];
+            $this->slug = $rez['slug'];
+            $this->image = $rez['image'];
+        } else {
+            return null;
+        }
+    }
+
+    public function load($id): ?News
+    {
+        $sql = $this->select();
+        $sql->cols(['*'])->from('news')->where('id = :id');
+        // echo $sql->getStatement();
+        // SELECT * FROM news WHERE id = :id
+        $sql->bindValue('id', $id);
+        if ($rez = $this->db->get($sql)) {
+            $this->id = (int)$rez['id'];
+            $this->title = (string)$rez['title'];
+            $this->content = (string)$rez['content'];
+            $this->authorId = (int)$rez['author_id'];
+            $this->createdAt = (string)$rez['created_at'];
+            $this->active = (int)$rez['active'];
+            $this->views = (int)$rez['views'];
+            $this->slug = (string)$rez['slug'];
+            $this->image = (string)$rez['image'];
+            return $this;
+        } else {
+            return null;
+        }
+    }
+
+    protected function assignData(): void
+    {
+        $this->data = [
+            'title' => $this->title,
+            'content' => $this->content,
+            'created_at' => $this->createdAt,
+            'author_id' => $this->authorId,
+            'active' => $this->active,
+            'views' => $this->views,
+            'slug' => $this->slug,
+            'image' => $this->image
+        ];
+    }
+
 
 
 

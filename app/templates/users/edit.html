@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %}{{new.title}}{% endblock %}
+{% block head %}
+{{ parent() }}
+
+{% endblock %}
+{% block content %}
+<div class="container">
+    <form action="http://127.0.0.1:8000/users/create" method="POST">
+        <div class="input-group">
+            <span class="input-group-text">First and last name</span>
+            <input name="name" type="text" aria-label="First name" class="form-control" placeholder="John">
+            <input name="last_name" type="text" aria-label="Last name" class="form-control" placeholder="Doe">
+        </div>
+        <div class="input-group">
+            <span class="input-group-text">Password</span>
+            <input name="password" type="text" aria-label="First name" class="form-control" placeholder="********">
+            <input name="password1" type="text" aria-label="Last name" class="form-control"placeholder="********">
+        </div>
+        <div class="input-group">
+            <span class="input-group-text">Email and nickname</span>
+            <input name="email" type="text" aria-label="First name" class="form-control" placeholder="john@doe.com">
+            <input name="nickname" type="text" aria-label="Last name" class="form-control"placeholder="nickname">
+        </div>
+        <div class="input">
+            <button type="submit" class="btn btn-primary">Register</button>
+        </div>
+
+    </form>
+</div>
+{% endblock %}
